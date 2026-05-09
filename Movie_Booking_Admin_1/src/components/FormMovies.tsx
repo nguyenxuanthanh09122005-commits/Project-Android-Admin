@@ -1,29 +1,31 @@
 import React, { useState } from 'react'
-import { CreateMovies } from '../services/moviesAPI';
+import { CreateMovies, EditMovies } from '../services/moviesAPI';
+import type { MoviesType } from '../type/typeMovies';
 export type ReloadData = {
+    movieItem: MoviesType | null,
     reloadData: () => void,
     onSuccess: () => void,
 }
 export default function FormMovies(props: ReloadData) {
-    const { reloadData, onSuccess } = props;
+    const { movieItem, reloadData, onSuccess } = props;
     const [loading, setLoading] = useState(false);
     console.log(loading);
 
     const [formData, setFormData] = useState({
-        movieName: '',
-        description: '',
-        duration: 0,
-        releaseDate: '',
-        posterImage: '',
-        trailerUrl: '',
-        genre: '',
-        ageRating: 'P'
+        movieName: movieItem ? movieItem.movieName : '',
+        description: movieItem ? movieItem.description : '',
+        duration: movieItem ? movieItem.duration : 0,
+        releaseDate: movieItem ? new Date(movieItem.releaseDate).toISOString().split('T')[0] : '',
+        posterImage: movieItem ? movieItem.posterImage : '',
+        trailerUrl: movieItem ? movieItem.trailerUrl : '',
+        genre: movieItem ? movieItem.genre : '',
+        ageRating: movieItem ? movieItem.ageRating : 'P'
     });
     console.log(formData);
     const handleFormData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        setFormData({ ...formData, [name]: name === "releaseDate" ? new Date(value) : value });
+        setFormData({ ...formData, [name]: value });
     }
     console.log(formData, "formData");
 
@@ -52,9 +54,20 @@ export default function FormMovies(props: ReloadData) {
             alert("Vui lòng điền đủ thông tin");
         }
         try {
-            const res = await CreateMovies(uploadForm)
-            console.log(res);
-            onSuccess();
+            if (movieItem) {
+                const res = await EditMovies(movieItem.movieId, uploadForm)
+                console.log(res);
+                onSuccess();
+                console.log("Editing movie with ID:", movieItem.movieId);
+                reloadData()
+            } else {
+                const res = await CreateMovies(uploadForm)
+                console.log(res);
+                onSuccess();
+                console.log("Creating new movie with data:", uploadForm);
+                reloadData()
+            }
+
         } catch (error) {
             console.log(error);
         } finally {
@@ -72,7 +85,7 @@ export default function FormMovies(props: ReloadData) {
                         <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                         </svg>
-                        Thêm Phim Mới Vào Hệ Thống
+                        {movieItem ? 'Chỉnh Sửa Phim' : 'Thêm Phim Mới Vào Hệ Thống'}
                     </h2>
                     <p className="text-indigo-100 text-sm mt-1 ml-9">Vui lòng điền đầy đủ thông tin để khởi tạo dữ liệu phim</p>
                 </div>
@@ -90,6 +103,7 @@ export default function FormMovies(props: ReloadData) {
                             <div className="md:col-span-2">
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Tên bộ phim</label>
                                 <input
+                                    value={formData.movieName}
                                     onChange={handleFormData}
                                     name='movieName'
                                     type="text"
@@ -101,6 +115,7 @@ export default function FormMovies(props: ReloadData) {
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Thể loại</label>
                                 <input
+                                    value={formData.genre}
                                     onChange={handleFormData}
                                     name='genre'
                                     type="text"
@@ -112,6 +127,7 @@ export default function FormMovies(props: ReloadData) {
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Giới hạn độ tuổi</label>
                                 <select
+                                    value={formData.ageRating}
                                     onChange={handleFormData}
                                     name='ageRating' className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none bg-white cursor-pointer appearance-none">
                                     <option value="P">P - Mọi lứa tuổi</option>
@@ -125,6 +141,7 @@ export default function FormMovies(props: ReloadData) {
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Thời lượng (phút)</label>
                                 <input
+                                    value={formData.duration}
                                     onChange={handleFormData}
                                     name='duration'
                                     type="number"
@@ -139,6 +156,7 @@ export default function FormMovies(props: ReloadData) {
                                     // value={formData.releaseDate instanceof Date && !isNaN(formData.releaseDate.getTime())
                                     //     ? formData.releaseDate.toISOString().split('T')[0]
                                     //     : ""}
+                                    value={formData.releaseDate}
                                     onChange={handleFormData}
                                     name='releaseDate'
                                     type="date"
@@ -159,6 +177,7 @@ export default function FormMovies(props: ReloadData) {
                             <div className="md:col-span-1">
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Poster</label>
                                 <input
+                                    value={formData.posterImage}
                                     onChange={handleFormData}
                                     name='posterImage'
                                     type="text"
@@ -187,6 +206,7 @@ export default function FormMovies(props: ReloadData) {
                             <h3 className="text-lg font-bold text-gray-800 uppercase tracking-wider text-sm">Nội dung tóm tắt</h3>
                         </div>
                         <textarea
+                            value={formData.description}
                             onChange={handleFormData}
                             name='description'
                             rows={4}
@@ -205,10 +225,10 @@ export default function FormMovies(props: ReloadData) {
                             Hủy bỏ
                         </button>
                         <button
-                            onClick={(e) => { handleSubmit(e); reloadData() }}
+                            onClick={(e) => { handleSubmit(e) }}
                             className="px-10 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
                         >
-                            Tạo Phim Mới
+                            {movieItem ? 'Cập nhật Phim' : 'Tạo Phim Mới'}
                         </button>
                     </div>
                 </form>

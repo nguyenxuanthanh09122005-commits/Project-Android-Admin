@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import type { MoviesType } from '../../type/typeMovies';
-import { getListMovies } from '../../services/moviesAPI';
+import { DeleteMovies, getListMovies } from '../../services/moviesAPI';
 import { MovieCard } from '../../components/MovieCard';
 import Modal from '../../components/Modal';
 import FormMovies from '../../components/FormMovies';
@@ -53,10 +53,15 @@ export default function Movies() {
     const OnClose = () => {
         setIsOpen(false);
     }
-    const DisplayEdit = (id: number) => {
-        setIsOpen(true);
-        console.log(id);
+    // const DisplayEdit = (id: number) => {
+    //     setIsOpen(true);
+    //     console.log(id);
 
+    // }
+    const handleDelete = async (id: number) => {
+        const res = await DeleteMovies(id);
+        console.log(res);
+        loadData();
     }
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
@@ -78,7 +83,7 @@ export default function Movies() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
                     {showing.map((item: MoviesType) => (
-                        <MovieCard key={item.movieId} item={item} handleIsOpen={() => setIsOpen(true)} />
+                        <MovieCard handleDelete={() => handleDelete(item.movieId)} handleEdit={() => setIsCreate(item)} key={item.movieId} item={item} handleIsOpen={() => setIsOpen(true)} />
                     ))}
                 </div>
             </section>
@@ -94,12 +99,12 @@ export default function Movies() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
                     {coming_soon.map((item: MoviesType) => (
-                        <MovieCard key={item.movieId} item={item} handleIsOpen={() => DisplayEdit(item.movieId)} />
+                        <MovieCard handleDelete={() => handleDelete(item.movieId)} handleEdit={() => setIsCreate(item)} key={item.movieId} item={item} handleIsOpen={() => setIsOpen(true)} />
                     ))}
                 </div>
             </section>
             <Modal isOpen={isOpen} onClose={OnClose}>
-                <FormMovies onSuccess={() => setIsOpen(false)} reloadData={loadData} />
+                <FormMovies movieItem={isCreate} onSuccess={() => setIsOpen(false)} reloadData={loadData} />
             </Modal>
         </div >
     )

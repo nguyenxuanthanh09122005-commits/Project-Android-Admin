@@ -10,6 +10,7 @@ import Bookings from '../pages/bookings/Bookings';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import DetailMovies from '../pages/movies/DetailMovies';
+import DetailCinemas from '../pages/cinemas/DetailCinemas';
 //  { path: "/cinemas", label: "Quản lý Rạp chiếu" },
 //     { path: "/theaterrooms", label: "Quản lý Phòng chiếu" },
 //     { path: "/seats", label: "Quản lý Ghế" },
@@ -26,6 +27,7 @@ const AppRouter = () => {
                     <Route path='/movies' element={<Movies />} />
                     <Route path='/movies/:id' element={<DetailMovies />} />
                     <Route path='/cinemas' element={<Cinemas />} />
+                    <Route path='/cinemas/:id' element={<DetailCinemas />} />
                     <Route path='/theaterrooms' element={<Theaterrooms />} />
                     <Route path='/seats' element={<Seats />} />
                     <Route path='/showtimes' element={<ShowTimes />} />

@@ -4,11 +4,12 @@ import type { MoviesType } from "../type/typeMovies";
 export type MovieCardType = {
     item: MoviesType,
     handleIsOpen: (id: number) => void,
-    handleEdit?: (id: number) => void,
+    handleEdit: () => void,
+    handleDelete: (id: number) => void,
 }
 export const MovieCard = (props: MovieCardType) => {
     const navigate = useNavigate();
-    const { item, handleIsOpen, } = props;
+    const { item, handleIsOpen, handleEdit, handleDelete } = props;
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group">
             {/* Poster Image */}
@@ -32,10 +33,10 @@ export const MovieCard = (props: MovieCardType) => {
 
                 {/* Admin Buttons */}
                 <div className="flex gap-2 mt-auto">
-                    <button onClick={() => { handleIsOpen(item.movieId) }} className="flex-1 bg-amber-50 hover:bg-amber-100 text-amber-600 text-xs font-bold py-2 rounded-lg border border-amber-200 transition-colors flex items-center justify-center">
+                    <button onClick={() => { handleIsOpen(item.movieId); handleEdit() }} className="flex-1 bg-amber-50 hover:bg-amber-100 text-amber-600 text-xs font-bold py-2 rounded-lg border border-amber-200 transition-colors flex items-center justify-center">
                         Sửa
                     </button>
-                    <button className="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold py-2 rounded-lg border border-rose-200 transition-colors flex items-center justify-center">
+                    <button onClick={() => handleDelete(item.movieId)} className="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold py-2 rounded-lg border border-rose-200 transition-colors flex items-center justify-center">
                         Xóa
                     </button>
                 </div>
