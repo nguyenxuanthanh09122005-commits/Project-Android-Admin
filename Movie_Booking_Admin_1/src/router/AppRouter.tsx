@@ -11,11 +11,8 @@ import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import DetailMovies from '../pages/movies/DetailMovies';
 import DetailCinemas from '../pages/cinemas/DetailCinemas';
-//  { path: "/cinemas", label: "Quản lý Rạp chiếu" },
-//     { path: "/theaterrooms", label: "Quản lý Phòng chiếu" },
-//     { path: "/seats", label: "Quản lý Ghế" },
-//     { path: "/showtimes", label: "Quản lý Ghế" },
-//     { path: "/bookings", label: "Quản lý Đặt vé" },
+import DetailTheaterrooms from '../pages/theaterrooms/DetailTheaterrooms';
+
 const AppRouter = () => {
     return (
         <BrowserRouter>
@@ -29,12 +26,12 @@ const AppRouter = () => {
                     <Route path='/cinemas' element={<Cinemas />} />
                     <Route path='/cinemas/:id' element={<DetailCinemas />} />
                     <Route path='/theaterrooms' element={<Theaterrooms />} />
+                    <Route path='/theaterrooms/:id' element={<DetailTheaterrooms />} />
                     <Route path='/seats' element={<Seats />} />
                     <Route path='/showtimes' element={<ShowTimes />} />
                     <Route path='/bookings' element={<Bookings />} />
                 </Route>
             </Routes>
-
         </BrowserRouter>
     )
 }

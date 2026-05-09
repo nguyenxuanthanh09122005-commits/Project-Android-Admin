@@ -6,6 +6,14 @@ export const getListTheaterRooms = async (id: number) => {
     return res.data;
 }
 export const CreateTheaterRooms = async (roomData: TheaterRoomTypeRequest) => {
-    const res = await api.post(`/admin/theater-rooms/cinema`, roomData);
+    const res = await api.post(`/admin/theater-rooms`, roomData);
+    return res.data;
+}
+export const EditTheaterRooms = async (id: number, roomData: TheaterRoomTypeRequest) => {
+    const res = await api.put(`/admin/theater-rooms/${id}`, roomData);
+    return res.data;
+}
+export const DeleteTheaterRooms = async (id: number) => {
+    const res = await api.delete(`/admin/theater-rooms/${id}`);
     return res.data;
 }

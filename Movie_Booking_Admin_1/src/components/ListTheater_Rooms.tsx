@@ -3,26 +3,24 @@ import type { TheaterRoomType } from '../type/typeTheaterRooms';
 
 import Modal from './Modal';
 import FormTheaterRooms from './FormTheaterRooms';
-import type { CinemaType } from '../type/typeCinema';
+import { DeleteTheaterRooms } from '../services/theater_roomsAPI';
+import TheaterRoomsCard from './TheaterRoomsCard';
+
 
 interface ListTheater_RoomsProps {
     rooms: TheaterRoomType[];
     cinemaId: number;
     loading?: boolean;
-    // onAddRoom?: () => void;
-    // onEditRoom?: (roomId: number) => void;
-    // onDeleteRoom?: (roomId: number) => void;
+    reloadData: () => void;
 }
 
 export default function ListTheater_Rooms({
     rooms,
+    reloadData,
     cinemaId,
     loading = false,
-    // onAddRoom,
-    // onEditRoom,
-    // onDeleteRoom
+
 }: ListTheater_RoomsProps) {
-    const [roomLoading, setRoomLoading] = React.useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isCreate, setIsCreate] = useState<TheaterRoomType | null>(null);
     console.log(cinemaId, "cinemaID");
@@ -30,25 +28,16 @@ export default function ListTheater_Rooms({
     const OnClose = () => {
         setIsOpen(false);
     }
+    const handleDelete = async (roomId: number) => {
+        const res = await DeleteTheaterRooms(roomId);
+        console.log(res);
+        reloadData();
 
+    };
+    const handleIsCreate = (room: TheaterRoomType | null) => {
+        setIsCreate(room);
 
-
-
-
-
-    // const handleAddRoom = async () => {
-    //     setRoomLoading(true);
-    //     try {
-    //         const res = await CreateTheaterRooms();
-    //     } catch (error) {
-    //         console.error("Error adding room:", error);
-    //     } finally {
-    //         setRoomLoading(false);
-    //     }
-    //     console.log("Add room for cinema ID:", cinemaId);
-    // }
-
-
+    }
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             {/* Section Header */}
@@ -79,50 +68,7 @@ export default function ListTheater_Rooms({
                 ) : rooms.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {rooms.map((room) => (
-                            <div
-                                key={room.roomId}
-                                className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200"
-                            >
-                                {/* Room Header */}
-                                <div className="flex items-start justify-between mb-4">
-                                    <div>
-                                        <h3 className="text-xl font-bold text-gray-900">{room.roomName}</h3>
-                                        <p className="text-sm text-gray-500">Phòng ID: {room.roomId}</p>
-                                    </div>
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700`}
-                                    >
-
-                                    </span>
-                                </div>
-
-                                {/* Room Info */}
-                                <div className="bg-white rounded-lg p-4 mb-4">
-                                    <div className="flex items-center gap-2 text-gray-700">
-                                        <span className="text-2xl">🪑</span>
-                                        <div>
-                                            <p className="text-sm text-gray-600">Sức chứa</p>
-                                            <p className="text-lg font-semibold">{room.totalSeats} ghế</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Action Buttons */}
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => { setIsOpen(true); setIsCreate(room) }}
-                                        className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-3 rounded-lg transition-colors duration-200 text-sm flex items-center justify-center gap-1"
-                                    >
-                                        ✏️ Sửa
-                                    </button>
-                                    <button
-                                        // onClick={() => onDeleteRoom?.(room.roomId)}
-                                        className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-3 rounded-lg transition-colors duration-200 text-sm flex items-center justify-center gap-1"
-                                    >
-                                        🗑️ Xóa
-                                    </button>
-                                </div>
-                            </div>
+                            <TheaterRoomsCard key={room.roomId} room={room} setIsOpen={() => setIsOpen(true)} setIsCreate={() => handleIsCreate(room)} handleDelete={handleDelete} />
                         ))}
                     </div>
                 ) : (
@@ -130,7 +76,7 @@ export default function ListTheater_Rooms({
                         <div className="text-gray-300 text-6xl mb-4">🎪</div>
                         <p className="text-gray-500 text-lg mb-6">Chưa có phòng chiếu nào</p>
                         <button
-                            // onClick={handleAddRoom}
+                            onClick={() => { setIsOpen(true); setIsCreate(null) }}
                             className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
                         >
                             ➕ Tạo phòng chiếu đầu tiên
@@ -139,7 +85,7 @@ export default function ListTheater_Rooms({
                 )}
             </div>
             <Modal isOpen={isOpen} onClose={OnClose}>
-                <FormTheaterRooms cinemaId={cinemaId} />
+                <FormTheaterRooms onSuccess={() => setIsOpen(false)} reloadData={reloadData} theaterRoomItem={isCreate} cinemaId={cinemaId} />
             </Modal>
         </div>
     )

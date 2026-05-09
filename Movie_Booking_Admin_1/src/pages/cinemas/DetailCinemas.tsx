@@ -55,11 +55,13 @@ export default function DetailCinemas() {
     console.log(cinema, "cinema");
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchCinemaDetail();
     }, [id]);
 
     useEffect(() => {
         if (cinema) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             fetchTheaterRooms();
         }
     }, [cinema, id]);
@@ -153,7 +155,7 @@ export default function DetailCinemas() {
                 </div>
 
             </div>
-            <ListTheater_Rooms cinemaId={Number(id)} rooms={rooms} loading={roomsLoading} />
+            <ListTheater_Rooms reloadData={fetchTheaterRooms} cinemaId={Number(id)} rooms={rooms} loading={roomsLoading} />
         </div>
     );
 }
