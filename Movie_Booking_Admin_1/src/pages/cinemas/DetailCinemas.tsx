@@ -2,20 +2,31 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import type { CinemaType } from '../../type/typeCinema'
-import { api } from '../../services/api';
+
+// import ListTheater_Rooms from '../../components/ListTheater_Rooms';
+
+import { getDetailCinemas } from '../../services/cinemaAPI';
+import type { TheaterRoomType } from '../../type/typeTheaterRooms';
+import { getListTheaterRooms } from '../../services/theater_roomsAPI';
+import ListTheater_Rooms from '../../components/ListTheater_Rooms';
+
+
 
 export default function DetailCinemas() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [cinema, setCinema] = useState<CinemaType | null>(null);
     const [loading, setLoading] = useState(true);
+    const [roomsLoading, setRoomsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [rooms, setRooms] = useState<TheaterRoomType[]>([]);
+
 
     const fetchCinemaDetail = async () => {
         try {
             setLoading(true);
-            const response = await api.get(`/cinemas/${id}`);
-            setCinema(response.data);
+            const response = await getDetailCinemas(Number(id));
+            setCinema(response);
             setError(null);
         } catch (err: unknown) {
             setError('Lỗi tải dữ liệu rạp chiếu');
@@ -24,11 +35,35 @@ export default function DetailCinemas() {
             setLoading(false);
         }
     };
+
+    const fetchTheaterRooms = async () => {
+        try {
+            setRoomsLoading(true);
+            const response = await getListTheaterRooms(Number(id));
+            setRooms(response);
+        } catch (err: unknown) {
+            console.error('Lỗi tải danh sách phòng chiếu:', err);
+            setRooms([]);
+        } finally {
+            setRoomsLoading(false);
+        }
+    };
+    console.log(rooms, "rooms");
+
+
+
     console.log(cinema, "cinema");
 
     useEffect(() => {
         fetchCinemaDetail();
     }, [id]);
+
+    useEffect(() => {
+        if (cinema) {
+            fetchTheaterRooms();
+        }
+    }, [cinema, id]);
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -59,11 +94,11 @@ export default function DetailCinemas() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-6xl mx-auto space-y-8">
                 {/* Back Button */}
                 <button
                     onClick={() => navigate(-1)}
-                    className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium mb-6 transition-colors"
+                    className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
                 >
                     ← Quay lại
                 </button>
@@ -118,6 +153,7 @@ export default function DetailCinemas() {
                 </div>
 
             </div>
+            <ListTheater_Rooms cinemaId={Number(id)} rooms={rooms} loading={roomsLoading} />
         </div>
     );
 }
