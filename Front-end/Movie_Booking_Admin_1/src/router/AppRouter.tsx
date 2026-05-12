@@ -12,6 +12,7 @@ import Register from '../pages/auth/Register';
 import DetailMovies from '../pages/movies/DetailMovies';
 import DetailCinemas from '../pages/cinemas/DetailCinemas';
 import DetailTheaterrooms from '../pages/theaterrooms/DetailTheaterrooms';
+import DetailShowTimes from '../pages/showtimes/DetailShowTimes';
 
 const AppRouter = () => {
     return (
@@ -29,6 +30,7 @@ const AppRouter = () => {
                     <Route path='/theaterrooms/:id' element={<DetailTheaterrooms />} />
                     <Route path='/seats' element={<Seats />} />
                     <Route path='/showtimes' element={<ShowTimes />} />
+                    <Route path='/showtimes/:id' element={<DetailShowTimes />} />
                     <Route path='/bookings' element={<Bookings />} />
                 </Route>
             </Routes>

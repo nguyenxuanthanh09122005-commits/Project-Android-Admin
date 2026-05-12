@@ -1,0 +1,82 @@
+================================================================================
+                         CINEMA API REFERENCE
+================================================================================
+Base URL: http://localhost:8080
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+ AUTHENTICATION
+────────────────────────────────────────────────────────────────────────────────
+
+  POST    /api/auth/register          Đăng ký tài khoản
+  POST    /api/auth/login             Đăng nhập
+  GET     /api/auth/me                Thông tin tài khoản hiện tại
+
+
+────────────────────────────────────────────────────────────────────────────────
+ PUBLIC ENDPOINTS
+────────────────────────────────────────────────────────────────────────────────
+
+  [ Movies ]
+  GET     /api/movies                 Lấy danh sách tất cả phim
+  GET     /api/movies/{movieId}       Lấy chi tiết một phim
+
+  [ Cinemas ]
+  GET     /api/cinemas                Lấy danh sách tất cả rạp
+  GET     /api/cinemas/{cinemaId}     Lấy chi tiết một rạp
+
+  [ Showtimes & Seats ]
+  GET     /api/showtimes                          Lấy tất cả suất chiếu
+  GET     /api/showtimes/{showtimeId}             Lấy chi tiết suất chiếu
+  GET     /api/showtimes/{showtimeId}/seats       Xem tình trạng ghế ngồi
+
+  [ Bookings ]
+  GET     /api/bookings               Xem đặt vé của tôi
+  POST    /api/bookings               Tạo đặt vé mới
+
+
+────────────────────────────────────────────────────────────────────────────────
+ ADMIN ENDPOINTS                                       ⚠ Yêu cầu quyền Admin
+────────────────────────────────────────────────────────────────────────────────
+
+  [ Movies ]
+  GET     /api/admin/movies                       Lấy tất cả phim
+  POST    /api/admin/movies                       Tạo phim mới
+  GET     /api/admin/movies/{movieId}             Chi tiết phim
+  PUT     /api/admin/movies/{movieId}             Cập nhật phim
+  DELETE  /api/admin/movies/{movieId}             Xoá phim
+
+  [ Cinemas ]
+  GET     /api/admin/cinemas                      Lấy tất cả rạp
+  POST    /api/admin/cinemas                      Tạo rạp mới
+  GET     /api/admin/cinemas/{cinemaId}           Chi tiết rạp
+  PUT     /api/admin/cinemas/{cinemaId}           Cập nhật rạp
+  DELETE  /api/admin/cinemas/{cinemaId}           Xoá rạp
+
+  [ Theater Rooms ]
+  GET     /api/admin/theater-rooms/cinema/{cinemaId}    Danh sách phòng theo rạp
+  POST    /api/admin/theater-rooms                      Tạo phòng chiếu mới
+  GET     /api/admin/theater-rooms/{roomId}             Chi tiết phòng chiếu
+  PUT     /api/admin/theater-rooms/{roomId}             Cập nhật phòng chiếu
+  DELETE  /api/admin/theater-rooms/{roomId}             Xoá phòng chiếu
+
+  [ Seats ]
+  GET     /api/admin/theater-rooms/{roomId}/seats               Danh sách ghế trong phòng
+  POST    /api/admin/theater-rooms/{roomId}/seats               Tạo ghế đơn lẻ
+  POST    /api/admin/theater-rooms/{roomId}/seats/bulk          Tạo nhiều ghế cùng lúc
+  DELETE  /api/admin/theater-rooms/{roomId}/seats/{seatId}      Xoá ghế
+
+  [ Showtimes ]
+  GET     /api/admin/showtimes                        Lấy tất cả suất chiếu
+  POST    /api/admin/showtimes                        Tạo suất chiếu mới
+  GET     /api/admin/showtimes/{showtimeId}           Chi tiết suất chiếu
+  PUT     /api/admin/showtimes/{showtimeId}           Cập nhật suất chiếu
+  DELETE  /api/admin/showtimes/{showtimeId}           Xoá suất chiếu
+
+  [ Bookings ]
+  GET     /api/admin/bookings                         Lấy tất cả đặt vé
+  GET     /api/admin/bookings/{bookingId}             Chi tiết đặt vé
+  PUT     /api/admin/bookings/{bookingId}/status      Cập nhật trạng thái đặt vé
+
+================================================================================

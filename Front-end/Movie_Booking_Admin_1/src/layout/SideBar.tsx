@@ -7,7 +7,7 @@ const menu = [
     { path: "/cinemas", label: "Quản lý Rạp chiếu" },
     { path: "/theaterrooms", label: "Quản lý Phòng chiếu" },
     { path: "/seats", label: "Quản lý Ghế" },
-    { path: "/showtimes", label: "Quản lý Ghế" },
+    { path: "/showtimes", label: "Quản lý Suất chiếu" },
     { path: "/bookings", label: "Quản lý Đặt vé" },
 ];
 

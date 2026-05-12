@@ -4,9 +4,11 @@ import { DeleteMovies, getListMovies } from '../../services/moviesAPI';
 import { MovieCard } from '../../components/MovieCard';
 import Modal from '../../components/Modal';
 import FormMovies from '../../components/FormMovies';
+import { MovieStore } from '../../store/MovieStore';
 
 
 export default function Movies() {
+    const { setMovies_zustand } = MovieStore();
     const [loading, setLoading] = useState(false);
     console.log(loading);
     const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +22,8 @@ export default function Movies() {
         try {
             const res = await getListMovies();
             console.log(res, "listMovies");
-            setMovies(res)
+            setMovies(res);
+            setMovies_zustand(res);
         } catch (error) {
             console.log(error);
         }
@@ -29,6 +32,7 @@ export default function Movies() {
         }
     }
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         loadData();
     }, [])
 

@@ -153,9 +153,7 @@ export default function FormMovies(props: ReloadData) {
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Ngày khởi chiếu</label>
                                 <input
-                                    // value={formData.releaseDate instanceof Date && !isNaN(formData.releaseDate.getTime())
-                                    //     ? formData.releaseDate.toISOString().split('T')[0]
-                                    //     : ""}
+
                                     value={formData.releaseDate}
                                     onChange={handleFormData}
                                     name='releaseDate'
