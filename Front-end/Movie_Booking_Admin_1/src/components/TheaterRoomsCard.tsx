@@ -1,5 +1,6 @@
 import React from 'react'
 import type { TheaterRoomType } from '../type/typeTheaterRooms';
+import { useNavigate } from 'react-router-dom';
 export type TheaterRoomsCardProps = {
     room: TheaterRoomType,
     setIsOpen: () => void,
@@ -8,13 +9,13 @@ export type TheaterRoomsCardProps = {
 }
 
 export default function TheaterRoomsCard({ room, setIsOpen, setIsCreate, handleDelete }: TheaterRoomsCardProps) {
-   
+    const navigate = useNavigate();
     return (
         <div
             key={room.roomId}
             className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200"
         >
-            <div>
+            <div onClick={() => navigate(`/theaterrooms/${room.roomId}/seats`)} className="cursor-pointer">
                 {/* Room Header */}
                 <div className="flex items-start justify-between mb-4">
                     <div>

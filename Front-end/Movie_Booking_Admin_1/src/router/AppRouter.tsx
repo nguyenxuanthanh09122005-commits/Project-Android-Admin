@@ -11,7 +11,7 @@ import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import DetailMovies from '../pages/movies/DetailMovies';
 import DetailCinemas from '../pages/cinemas/DetailCinemas';
-import DetailTheaterrooms from '../pages/theaterrooms/DetailTheaterrooms';
+
 import DetailShowTimes from '../pages/showtimes/DetailShowTimes';
 
 const AppRouter = () => {
@@ -27,8 +27,8 @@ const AppRouter = () => {
                     <Route path='/cinemas' element={<Cinemas />} />
                     <Route path='/cinemas/:id' element={<DetailCinemas />} />
                     <Route path='/theaterrooms' element={<Theaterrooms />} />
-                    <Route path='/theaterrooms/:id' element={<DetailTheaterrooms />} />
-                    <Route path='/seats' element={<Seats />} />
+                    {/* <Route path='/theaterrooms/:id' element={<DetailTheaterrooms />} /> */}
+                    <Route path='/theaterrooms/:id/seats' element={<Seats />} />
                     <Route path='/showtimes' element={<ShowTimes />} />
                     <Route path='/showtimes/:id' element={<DetailShowTimes />} />
                     <Route path='/bookings' element={<Bookings />} />
