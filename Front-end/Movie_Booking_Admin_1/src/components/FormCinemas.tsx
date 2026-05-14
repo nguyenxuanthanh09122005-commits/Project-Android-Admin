@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import type { CinemaType, CinemaTypeRequest } from '../type/typeCinema'
 import { CreateCinemas, EditCinemas } from '../services/cinemaAPI'
+import { toast } from 'react-toastify'
 
 interface FormCinemasProps {
     cinemaItem: CinemaType | null
@@ -39,9 +40,11 @@ export default function FormCinemas({ cinemaItem, onSuccess, reloadData }: FormC
             if (cinemaItem) {
                 const res = await EditCinemas(cinemaItem.cinemaId, formData);
                 console.log(res, "Edit");
+                toast.success('Update rạp thành công!')
             } else {
                 const res = await CreateCinemas(formData);
                 console.log(res, "Create");
+                toast.success('Thêm rạp thành công!')
             }
 
             onSuccess()

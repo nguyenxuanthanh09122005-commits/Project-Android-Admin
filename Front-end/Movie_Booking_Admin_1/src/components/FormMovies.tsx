@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { CreateMovies, EditMovies } from '../services/moviesAPI';
 import type { MoviesType } from '../type/typeMovies';
+import { toast } from 'react-toastify';
 export type ReloadData = {
     movieItem: MoviesType | null,
     reloadData: () => void,
@@ -58,12 +59,14 @@ export default function FormMovies(props: ReloadData) {
                 const res = await EditMovies(movieItem.movieId, uploadForm)
                 console.log(res);
                 onSuccess();
+                toast.success('Update phim thành công!')
                 console.log("Editing movie with ID:", movieItem.movieId);
                 reloadData()
             } else {
                 const res = await CreateMovies(uploadForm)
                 console.log(res);
                 onSuccess();
+                toast.success('Thêm phim thành công!')
                 console.log("Creating new movie with data:", uploadForm);
                 reloadData()
             }

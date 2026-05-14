@@ -3,6 +3,7 @@ import type { getMovieIdShowTimes, ShowTimesRequest, ShowTimesResponse } from '.
 import { MovieStore } from '../store/MovieStore';
 import { useState } from 'react';
 import { CreateShowTimes, EditShowTimes } from '../services/apiShowTimes';
+import { toast } from 'react-toastify';
 export type FormShowTimesProps = {
     reload?: () => void,
     onClose: () => void,
@@ -98,13 +99,13 @@ export default function FormShowTimes(props: FormShowTimesProps) {
             if (showtimeEdited) {
                 const res = await EditShowTimes(showtimeEdited.showtimeId, uploadForm);
                 console.log(res, "resEditShowTimes");
-                alert("Cập nhật suất chiếu thành công");
+                toast.success("Cập nhật suất chiếu thành công !")
                 reload?.();
                 onClose();
             } else {
                 const res = await CreateShowTimes(uploadForm);
                 console.log(res, "resCreateShowTimes");
-                alert("Thêm suất chiếu thành công");
+                toast.success("Thêm suất chiếu thành công !")
                 reload?.();
                 onClose();
             }

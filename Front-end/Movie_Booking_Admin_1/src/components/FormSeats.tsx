@@ -4,6 +4,7 @@ import { CreateSeat, CreateListSeats } from '../services/apiSeats';
 // import { getDetailTheaterRooms } from '../services/theater_roomsAPI';
 import type { TheaterRoomType } from '../type/typeTheaterRooms';
 import { getDetailTheaterRooms } from '../services/theater_roomsAPI';
+import { toast } from 'react-toastify';
 
 export type FormSeatsProps = {
     listSeats: Record<string, SeatResponse[]>,
@@ -70,6 +71,7 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
                 alert("Đã đạt giới hạn ghế !!!")
             } else {
                 await CreateSeat(roomId, singleData);
+                toast.success('Thêm ghế thành công!')
                 onSuccess();
                 onClose();
             }
@@ -144,7 +146,7 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
                 alert(`Phòng chiếu không đủ sức chứa thêm ${seats.length} ghế  !!!`)
             } else {
                 await CreateListSeats(roomId, payload);
-                alert(`Đã thêm thành công ${seats.length} ghế!`);
+                toast.success(`Đã thêm ${seats.length} ghế!`)
                 onSuccess();
                 onClose();
             }

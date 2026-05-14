@@ -6,6 +6,7 @@ import Modal from '../../components/Modal'
 import FormCinemas from '../../components/FormCinemas'
 
 import { DeleteCinemas } from '../../services/cinemaAPI'
+import { toast } from 'react-toastify'
 
 
 export default function Cinemas() {
@@ -58,6 +59,7 @@ export default function Cinemas() {
         try {
             const response = await DeleteCinemas(id);
             console.log(response, "delete cinema");
+            toast.success('Xóa rạp thành công!')
         } catch (error) {
             console.log(error);
         } finally {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import type { TheaterRoomType, TheaterRoomTypeRequest } from '../type/typeTheaterRooms';
 import { CreateTheaterRooms, EditTheaterRooms } from '../services/theater_roomsAPI';
+import { toast } from 'react-toastify';
 
 export type { TheaterRoomTypeRequest } from '../type/typeTheaterRooms';
 type TheaterRoomsProps = {
@@ -37,12 +38,12 @@ export default function FormTheaterRooms({ theaterRoomItem, cinemaId, onSuccess,
             if (theaterRoomItem) {
                 const res = await EditTheaterRooms(theaterRoomItem.roomId, formData);
                 console.log(res, "Edit response");
-
+                toast.success('Update phòng chiếu thành công!')
 
             } else {
                 const res = await CreateTheaterRooms(formData);
                 console.log(res, "Create response");
-
+                toast.success('Thêm phòng chiếu thành công!')
             }
             onSuccess();
             reloadData();

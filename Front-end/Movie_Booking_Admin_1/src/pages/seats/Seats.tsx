@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import FormSeats from '../../components/FormSeats';
 import SeatsCard from '../../components/SeatsCard';
+import { toast } from 'react-toastify';
 
 export default function Seats() {
   const [seats, setSeats] = useState<SeatResponse[]>([]);
@@ -36,6 +37,7 @@ export default function Seats() {
     if (window.confirm('Bạn có chắc chắn muốn xóa ghế này không?')) {
       try {
         await DeleteSeat(Number(id), seatId);
+        toast.success('Xóa ghế thành công!')
         loadData();
       } catch (error) {
         console.error('Lỗi khi xóa ghế:', error);

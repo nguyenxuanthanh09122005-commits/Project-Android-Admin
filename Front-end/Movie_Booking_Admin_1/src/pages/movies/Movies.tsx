@@ -5,6 +5,7 @@ import { MovieCard } from '../../components/MovieCard';
 import Modal from '../../components/Modal';
 import FormMovies from '../../components/FormMovies';
 import { MovieStore } from '../../store/MovieStore';
+import { toast } from 'react-toastify';
 
 
 export default function Movies() {
@@ -65,6 +66,7 @@ export default function Movies() {
     const handleDelete = async (id: number) => {
         const res = await DeleteMovies(id);
         console.log(res);
+        toast.success('Xóa phim thành công !')
         loadData();
     }
     return (

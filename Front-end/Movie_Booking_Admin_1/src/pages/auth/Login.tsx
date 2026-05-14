@@ -4,6 +4,7 @@ import { type FormloginType } from '../../type/typeAuth';
 import { getLogin } from '../../services/authAPI';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthStore } from '../../store/AuthStore';
+import { toast } from 'react-toastify';
 
 
 export default function Login() {
@@ -37,6 +38,7 @@ export default function Login() {
             if (res.status === 200) {
                 setLogin(res.data.token, res.data.email, res.data.role);
                 if (res.data.role === "ROLE_ADMIN") {
+                    toast.success('Đăng nhập thành công')
                     navigate("/");
                 }
             }

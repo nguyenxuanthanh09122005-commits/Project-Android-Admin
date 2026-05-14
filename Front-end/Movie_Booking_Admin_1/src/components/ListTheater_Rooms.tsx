@@ -5,6 +5,7 @@ import Modal from './Modal';
 import FormTheaterRooms from './FormTheaterRooms';
 import { DeleteTheaterRooms } from '../services/theater_roomsAPI';
 import TheaterRoomsCard from './TheaterRoomsCard';
+import { toast } from 'react-toastify';
 
 
 interface ListTheater_RoomsProps {
@@ -31,6 +32,7 @@ export default function ListTheater_Rooms({
         if (window.confirm("Bạn có chắc chắn muốn xóa phòng này không?")) {
             const res = await DeleteTheaterRooms(roomId);
             console.log(res);
+            toast.success('Xóa phòng chiếu thành công!')
             reloadData();
         }
     };

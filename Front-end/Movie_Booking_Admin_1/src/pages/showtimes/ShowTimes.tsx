@@ -6,6 +6,7 @@ import ShowTimesCard from '../../components/ShowTimesCard';
 import FilterShowTimes from '../../components/FilterShowTimes';
 import Modal from '../../components/Modal';
 import FormShowTimes from '../../components/FormShowTimes';
+import { toast } from 'react-toastify';
 
 export default function ShowTimes() {
   const [showTimes, setShowTimes] = useState<ShowTimesResponse[]>([]);
@@ -36,6 +37,7 @@ export default function ShowTimes() {
   }, []);
   const handleDelete = async (id: number) => {
     const res = await DeleteShowTimes(Number(id));
+    toast.success("Xóa thành công !");
     console.log(res);
     await fetchShowTimes();
 
