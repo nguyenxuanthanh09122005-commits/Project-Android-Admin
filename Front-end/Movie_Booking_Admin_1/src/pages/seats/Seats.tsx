@@ -10,7 +10,7 @@ export default function Seats() {
   const [seats, setSeats] = useState<SeatResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  // const [countSeats, setCountSeats] = useState<number>(0);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -25,6 +25,7 @@ export default function Seats() {
       setLoading(false);
     }
   }
+  console.log(seats, "ssssssssssssss");
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -93,7 +94,7 @@ export default function Seats() {
             onClick={() => setIsModalOpen(true)}
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-md transition-all active:scale-95 flex items-center gap-2"
           >
-            <span className="text-xl">➕</span> Quản lý ghế
+            Thêm ghế
           </button>
         </div>
 
@@ -109,14 +110,12 @@ export default function Seats() {
             <p className="text-gray-500">Mã phòng: <span className="font-mono text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">{id}</span> • Tổng số: <span className="font-semibold">{seats.length}</span> ghế</p>
           </div>
 
-          {/* Screen Visualization */}
           <div className="w-full mb-20 relative">
             <div className="w-4/5 h-3 bg-gradient-to-b from-gray-400 to-gray-200 mx-auto rounded-full shadow-[0_15px_30px_rgba(0,0,0,0.1)] relative z-10"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-20 bg-gradient-to-b from-gray-100/50 to-transparent blur-xl -mt-4 opacity-50"></div>
             <p className="text-center mt-6 text-gray-400 text-xs uppercase tracking-[0.3em] font-bold">Màn hình</p>
           </div>
 
-          {/* Seats Grid Container */}
           <div className="flex flex-col gap-5 items-center overflow-x-auto pb-10 scrollbar-thin scrollbar-thumb-gray-200">
             {sortedRows.length > 0 ? (
               sortedRows.map((row) => (
@@ -127,12 +126,12 @@ export default function Seats() {
                   </div>
 
                   <div className="flex gap-2.5">
-                    {groupedSeats[row].map((seat) => (
-                      <SeatsCard seat={seat} handleDeleteSeat={() => handleDeleteSeat(seat.seatId)} />
-                    ))}
+                    {groupedSeats[row].map((seat) => {
+                      // setCountSeats(countSeats + 1);
+                      return (< SeatsCard seat={seat} handleDeleteSeat={() => handleDeleteSeat(seat.seatId)} />)
+                    })}
                   </div>
 
-                  {/* Row Label Right */}
                   <div className="w-8 h-8 flex items-center justify-center font-bold text-gray-400 border border-gray-100 rounded-md bg-gray-50 text-sm">
                     {row}
                   </div>
@@ -149,7 +148,6 @@ export default function Seats() {
             )}
           </div>
 
-          {/* Legend Section */}
           <div className="mt-16 bg-gray-50 rounded-xl p-6 border border-gray-100">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6 text-center">Chú thích</h4>
             <div className="flex flex-wrap justify-center gap-x-12 gap-y-6">
@@ -182,7 +180,7 @@ export default function Seats() {
             <h3 className="text-2xl font-bold text-gray-900">Quản lý sơ đồ ghế</h3>
             <p className="text-gray-500 text-sm">Thêm một hoặc nhiều ghế vào phòng chiếu</p>
           </div>
-          <FormSeats listSeats={groupedSeats} roomId={Number(id)} onClose={() => setIsModalOpen(false)} onSuccess={loadData} />
+          <FormSeats countSeat={seats.length} listSeats={groupedSeats} roomId={Number(id)} onClose={() => setIsModalOpen(false)} onSuccess={loadData} />
         </div>
       </Modal>
     </div>

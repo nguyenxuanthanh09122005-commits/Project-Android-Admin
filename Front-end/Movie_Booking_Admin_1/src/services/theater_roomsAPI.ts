@@ -5,6 +5,10 @@ export const getListTheaterRooms = async (id: number) => {
     const res = await api.get(`/admin/theater-rooms/cinema/${id}`);
     return res.data;
 }
+export const getDetailTheaterRooms = async (id: number) => {
+    const res = await api.get(`/admin/theater-rooms/${id}`);
+    return res.data;
+}
 export const CreateTheaterRooms = async (roomData: TheaterRoomTypeRequest) => {
     const res = await api.post(`/admin/theater-rooms`, roomData);
     return res.data;

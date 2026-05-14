@@ -95,22 +95,23 @@ export default function Cinemas() {
                     </div>
                 )}
 
-                {/* Cinemas Grid */}
+                {/* Cinemas List */}
                 {cinemas.length > 0 ? (
-                    <div className="space-y-10">
+                    <div className="space-y-12">
                         {cityNames.map((city) => (
-                            <section key={city} className="space-y-4">
-                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                                    <div>
-                                        <h2 className="text-2xl font-semibold text-slate-900">{city}</h2>
-                                        <p className="text-sm text-slate-500">{groupedCinemas[city].length} rạp chiếu</p>
+                            <section key={city} className="space-y-6">
+                                <div className="flex items-center gap-4 border-b border-slate-200 pb-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl border border-slate-100">
+                                        🏙️
                                     </div>
-                                    <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">
-                                        <span>📌</span>
-                                        <span>City group</span>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-slate-900">{city}</h2>
+                                        <p className="text-sm font-medium text-slate-500">
+                                            Khu vực có <span className="text-indigo-600 font-bold">{groupedCinemas[city].length}</span> rạp đang hoạt động
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className="flex flex-col gap-4">
                                     {groupedCinemas[city].map((cinema) => (
                                         <CinemaCard
                                             key={cinema.cinemaId}

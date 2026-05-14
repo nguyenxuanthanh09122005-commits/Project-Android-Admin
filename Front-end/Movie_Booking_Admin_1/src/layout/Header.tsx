@@ -13,13 +13,13 @@ export default function Header() {
     }
     return (
         <div className="h-20 bg-white shadow flex justify-between items-center px-6">
-            <h2>Admin Panel </h2>
-            <div>
+
+            <div className="w-full">
                 {token ? (
-                    <>
-                        <span className="mr-4">Chào mừng Admin</span>
-                        <button onClick={handleLogout}>Logout</button>
-                    </>
+                    <div className="flex flex-row justify-between items-center ">
+                        <span className="text-2xl font-bold text-indigo-600">Chào mừng Admin</span>
+                        <button onClick={handleLogout} className="px-[15px] py-[5px] rounded-[5px] bg-red-500 text-white font-bold">Logout</button>
+                    </div>
                 ) : null}
             </div>
         </div>

@@ -1,24 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { SeatResponse, SeatRequest, SeatBulkRequest } from '../type/typeSeats'
 import { CreateSeat, CreateListSeats } from '../services/apiSeats';
+// import { getDetailTheaterRooms } from '../services/theater_roomsAPI';
+import type { TheaterRoomType } from '../type/typeTheaterRooms';
+import { getDetailTheaterRooms } from '../services/theater_roomsAPI';
 
 export type FormSeatsProps = {
     listSeats: Record<string, SeatResponse[]>,
     roomId: number,
     onClose: () => void,
-    onSuccess: () => void
+    onSuccess: () => void,
+    countSeat: number
 }
 
-export default function FormSeats({ listSeats, roomId, onClose, onSuccess }: FormSeatsProps) {
+export default function FormSeats({ listSeats, roomId, onClose, onSuccess, countSeat }: FormSeatsProps) {
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<'single' | 'batch'>('batch');
-
-    // Batch form state
+    const [ItemRooms, setItemRooms] = useState<TheaterRoomType>({
+        roomId: 0,
+        cinemaId: 0,
+        cinemaName: "",
+        roomName: "",
+        totalSeats: 0
+    });
     const [totalQuantity, setTotalQuantity] = useState(10);
     const [seatsPerRow, setSeatsPerRow] = useState(10);
     const [batchSeatType, setBatchSeatType] = useState('NORMAL');
 
-    // Single form state logic
+
+    useEffect(() => {
+        const loadRooms = async () => {
+            const res = await getDetailTheaterRooms(roomId);
+            console.log(res);
+            setItemRooms(res)
+        }
+        loadRooms()
+    }, [roomId])
+    console.log(ItemRooms, "ItemRooms");
+
     const rows = Object.keys(listSeats).sort();
     let nextRow = 'A';
     let nextNumber = 1;
@@ -45,10 +64,19 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess }: For
         e.preventDefault();
         setLoading(true);
         try {
-            await CreateSeat(roomId, singleData);
-            onSuccess();
-            onClose();
-        } catch (error) {
+            const res = await getDetailTheaterRooms(roomId);
+            setItemRooms(res);
+            if (countSeat >= ItemRooms.totalSeats) {
+                alert("Đã đạt giới hạn ghế !!!")
+            } else {
+                await CreateSeat(roomId, singleData);
+                onSuccess();
+                onClose();
+            }
+            console.log(countSeat, ItemRooms.totalSeats, "quantiityyy");
+
+        }
+        catch (error) {
             console.error(error);
             alert('Lỗi khi thêm ghế');
         } finally {
@@ -111,10 +139,17 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess }: For
                 if (currentRowChar.charCodeAt(0) > 'Z'.charCodeAt(0) + 20) break;
             }
             const payload: SeatBulkRequest = { seats };
-            await CreateListSeats(roomId, payload);
-            alert(`Đã thêm thành công ${seats.length} ghế!`);
-            onSuccess();
-            onClose();
+
+            if ((countSeat + seats.length) > ItemRooms.totalSeats) {
+                alert(`Phòng chiếu không đủ sức chứa thêm ${seats.length} ghế  !!!`)
+            } else {
+                await CreateListSeats(roomId, payload);
+                alert(`Đã thêm thành công ${seats.length} ghế!`);
+                onSuccess();
+                onClose();
+            }
+            console.log(countSeat + seats.length, "conuttttt");
+
         } catch (error) {
             console.error('Lỗi khi thêm ghế hàng loạt:', error);
             alert('Có lỗi xảy ra khi thêm ghế');

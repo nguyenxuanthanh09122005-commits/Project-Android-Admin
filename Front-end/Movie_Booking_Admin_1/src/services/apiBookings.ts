@@ -13,3 +13,4 @@ export const updateBookingStatus = async (bookingId: number, status: BookingStat
     const res = await api.put(`/admin/bookings/${bookingId}`, { status });
     return res.data;
 }
+

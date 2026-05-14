@@ -1,7 +1,8 @@
 import type { SeatResponse } from '../type/typeSeats'
 export type SeatCardProps = {
     seat: SeatResponse,
-    handleDeleteSeat: (id: number) => void
+    handleDeleteSeat: (id: number) => void,
+
 }
 export default function SeatsCard(props: SeatCardProps) {
     const { seat, handleDeleteSeat } = props;

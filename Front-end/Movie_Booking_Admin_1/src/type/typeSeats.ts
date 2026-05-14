@@ -9,7 +9,8 @@ export type SeatResponse = {
     roomId: number,
     rowLetter: string,
     seatNumber: number,
-    seatType: string
+    seatType: string,
+
 }
 export type SeatBulkRequest = {
     seats: SeatRequest[]
