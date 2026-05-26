@@ -30,6 +30,7 @@ export default function ShowTimes() {
       setLoading(false);
     }
   };
+  console.log(showTimes, "listSuatchieu");
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
