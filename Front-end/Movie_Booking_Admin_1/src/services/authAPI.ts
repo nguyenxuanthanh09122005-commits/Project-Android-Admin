@@ -2,7 +2,7 @@
 import axios from "axios"
 import type { FormloginType, FormRegisterType } from "../type/typeAuth"
 
-const baseURL = "http://localhost:8080/api";
+const baseURL = "https://movie-booking-backend-deploy.onrender.com/api";
 export const getLogin = async (form: FormloginType) => {
     const res = await axios.post(`${baseURL}/auth/login`, form)
     return res;

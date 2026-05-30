@@ -10,7 +10,7 @@ export const getDetailedBooking = async (bookingId: number) => {
     return res.data;
 }
 export const updateBookingStatus = async (bookingId: number, status: BookingStatusUpdateRequest) => {
-    const res = await api.put(`/admin/bookings/${bookingId}`, { status });
+    const res = await api.put(`/admin/bookings/${bookingId}/status`, status);
     return res.data;
 }
 
