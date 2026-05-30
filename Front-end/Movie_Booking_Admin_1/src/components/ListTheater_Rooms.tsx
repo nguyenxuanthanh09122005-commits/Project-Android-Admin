@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { TheaterRoomType } from '../type/typeTheaterRooms';
 
 import Modal from './Modal';

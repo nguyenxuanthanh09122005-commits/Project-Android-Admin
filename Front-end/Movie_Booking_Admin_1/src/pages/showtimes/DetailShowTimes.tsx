@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { ShowTimesResponse } from '../../type/typeShowTimes';
 import { getShowTimeById } from '../../services/apiShowTimes';
@@ -7,18 +7,18 @@ import FormShowTimes from '../../components/FormShowTimes';
 
 export type DetailShowTimesProps = {
 
-    onClose: () => void,
+    onClose?: () => void,
 
 }
 export default function DetailShowTimes(props: DetailShowTimesProps) {
     const { onClose } = props;
     const { id } = useParams();
     const navigate = useNavigate();
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
     console.log(loading);
 
-    const [showtime, setShowtime] = React.useState<ShowTimesResponse>({
+    const [showtime, setShowtime] = useState<ShowTimesResponse>({
         showtimeId: 0,
         movieId: 0,
         cinemaId: 0,
@@ -178,7 +178,7 @@ export default function DetailShowTimes(props: DetailShowTimesProps) {
 
                         {/* Action Buttons */}
                         <div className="space-y-2">
-                            <button onClick={() => { setIsOpen(true); onClose() }} className="w-full px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold flex items-center justify-center gap-2">
+                            <button onClick={() => { setIsOpen(true); onClose?.() }} className="w-full px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold flex items-center justify-center gap-2">
                                 ✏️ Chỉnh sửa
                             </button>
                             {/* <button className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center gap-2">

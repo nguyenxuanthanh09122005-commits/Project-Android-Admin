@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { SeatResponse } from '../../type/typeSeats';
 import { getListSeatsbyRoom, DeleteSeat } from '../../services/apiSeats';
 import { useParams, useNavigate } from 'react-router-dom';

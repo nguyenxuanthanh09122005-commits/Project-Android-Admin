@@ -1,4 +1,3 @@
-import React from 'react'
 import type { TheaterRoomType } from '../type/typeTheaterRooms';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function DetailTheaterrooms() {
     return (
         <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
