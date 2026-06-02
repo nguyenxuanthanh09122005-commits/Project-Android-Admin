@@ -169,6 +169,14 @@ export default function Seats() {
                 </div>
               </div>
 
+              <div className="flex items-center gap-3 group">
+                <div className="w-8 h-8 bg-pink-500 rounded-t-lg rounded-b-sm border-b-4 border-pink-700 shadow-sm transition-transform group-hover:scale-110"></div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-gray-700">Ghế Đôi</span>
+                  <span className="text-[10px] text-gray-400 italic">Dành cho cặp đôi</span>
+                </div>
+              </div>
+
 
             </div>
             <p className="text-center mt-6 text-[10px] text-gray-400 italic">* Mẹo: Click vào ghế bất kỳ để xóa ghế đó khỏi sơ đồ.</p>

@@ -1,4 +1,4 @@
-import type { SeatBulkRequest, SeatRequest } from "../type/typeSeats";
+import type { SeatBulkRequest, SeatRequest, SeatStatus, SeatType } from "../type/typeSeats";
 import { api } from "./api";
 
 export const getListSeatsbyRoom = async (roomId: number) => {
@@ -15,5 +15,13 @@ export const CreateListSeats = async (roomId: number, data: SeatBulkRequest) => 
 }
 export const DeleteSeat = async (roomId: number, seatId: number) => {
     const res = await api.delete(`/admin/theater-rooms/${roomId}/seats/${seatId}`);
+    return res.data;
+}
+export const UpdateSeatStatus = async (roomId: number, seatId: number, status: SeatStatus) => {
+    const res = await api.put(`/admin/theater-rooms/${roomId}/seats/${seatId}/status`, { status });
+    return res.data;
+}
+export const UpdateSeatType = async (roomId: number, seatId: number, type: SeatType) => {
+    const res = await api.put(`/admin/theater-rooms/${roomId}/seats/${seatId}/type`, { type });
     return res.data;
 }

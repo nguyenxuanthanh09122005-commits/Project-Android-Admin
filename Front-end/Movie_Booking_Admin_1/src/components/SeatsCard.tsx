@@ -19,7 +19,9 @@ export default function SeatsCard(props: SeatCardProps) {
                           shadow-sm border-b-4
                           ${seat.seatType === 'VIP'
                     ? 'bg-amber-400 text-white border-amber-600 hover:bg-red-500 hover:border-red-700'
-                    : 'bg-indigo-500 text-white border-indigo-700 hover:bg-red-500 hover:border-red-700'
+                    : seat.seatType === 'COUPLE'
+                        ? 'bg-pink-500 text-white border-pink-700 hover:bg-red-500 hover:border-red-700'
+                        : 'bg-indigo-500 text-white border-indigo-700 hover:bg-red-500 hover:border-red-700'
                 }
                           hover:-translate-y-1 hover:shadow-md active:scale-95
                         `}

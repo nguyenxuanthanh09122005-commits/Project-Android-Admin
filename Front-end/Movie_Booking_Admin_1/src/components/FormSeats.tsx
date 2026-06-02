@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { SeatResponse, SeatRequest, SeatBulkRequest } from '../type/typeSeats'
+import type { SeatResponse, SeatRequest, SeatBulkRequest, SeatType } from '../type/typeSeats'
 import { CreateSeat, CreateListSeats } from '../services/apiSeats';
 // import { getDetailTheaterRooms } from '../services/theater_roomsAPI';
 import type { TheaterRoomType } from '../type/typeTheaterRooms';
@@ -26,7 +26,7 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
     });
     const [totalQuantity, setTotalQuantity] = useState(10);
     const [seatsPerRow, setSeatsPerRow] = useState(10);
-    const [batchSeatType, setBatchSeatType] = useState('NORMAL');
+    const [batchSeatType, setBatchSeatType] = useState<SeatType>('NORMAL');
 
 
     useEffect(() => {
@@ -55,10 +55,11 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
         }
     }
 
-    const [singleData, setSingleData] = useState({
+    const [singleData, setSingleData] = useState<SeatRequest>({
         rowLetter: nextRow,
         seatNumber: nextNumber,
-        seatType: 'NORMAL'
+        seatType: 'NORMAL',
+        seatStatus: 'ACTIVE'
     });
 
     const handleSingleSubmit = async (e: React.FormEvent) => {
@@ -70,7 +71,8 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
             if (countSeat >= ItemRooms.totalSeats) {
                 alert("Đã đạt giới hạn ghế !!!")
             } else {
-                await CreateSeat(roomId, singleData);
+                const res = await CreateSeat(roomId, singleData);
+                console.log(res, "res single");
                 toast.success('Thêm ghế thành công!')
                 onSuccess();
                 onClose();
@@ -127,7 +129,8 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
                     seats.push({
                         rowLetter: currentRowChar,
                         seatNumber: currentSeatNum,
-                        seatType: batchSeatType
+                        seatType: batchSeatType,
+                        seatStatus: 'ACTIVE'
                     });
                     remaining--;
                 }
@@ -145,7 +148,8 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
             if ((countSeat + seats.length) > ItemRooms.totalSeats) {
                 alert(`Phòng chiếu không đủ sức chứa thêm ${seats.length} ghế  !!!`)
             } else {
-                await CreateListSeats(roomId, payload);
+                const res = await CreateListSeats(roomId, payload);
+                console.log(res, "res batch");
                 toast.success(`Đã thêm ${seats.length} ghế!`)
                 onSuccess();
                 onClose();
@@ -211,11 +215,12 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
                         <label className="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Loại ghế áp dụng</label>
                         <select
                             value={batchSeatType}
-                            onChange={(e) => setBatchSeatType(e.target.value)}
+                            onChange={(e) => setBatchSeatType(e.target.value as SeatType)}
                             className="mt-1 block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3.5 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all font-semibold"
                         >
                             <option value="NORMAL">Ghế Thường</option>
                             <option value="VIP">Ghế VIP</option>
+                            <option value="COUPLE">Ghế Đôi</option>
                         </select>
                     </div>
 
@@ -259,11 +264,12 @@ export default function FormSeats({ listSeats, roomId, onClose, onSuccess, count
                         <label className="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Loại ghế</label>
                         <select
                             value={singleData.seatType}
-                            onChange={(e) => setSingleData({ ...singleData, seatType: e.target.value })}
+                            onChange={(e) => setSingleData({ ...singleData, seatType: e.target.value as SeatType })}
                             className="mt-1 block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3.5 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all font-semibold"
                         >
                             <option value="NORMAL">Ghế Thường</option>
                             <option value="VIP">Ghế VIP</option>
+                            <option value="COUPLE">Ghế Đôi</option>
                         </select>
                     </div>
 

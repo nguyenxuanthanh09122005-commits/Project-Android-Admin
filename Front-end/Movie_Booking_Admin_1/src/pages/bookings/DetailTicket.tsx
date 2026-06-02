@@ -130,7 +130,10 @@ export default function DetailTicket(props: DetailTicketProps) {
                                 </div>
 
                                 {/* Seat Display */}
-                                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white mb-4 text-center">
+                                <div className={`bg-gradient-to-br ${ticketItem.seatType === 'VIP' ? 'from-amber-400 to-amber-500' :
+                                        ticketItem.seatType === 'COUPLE' ? 'from-pink-500 to-pink-600' :
+                                            'from-blue-500 to-blue-600'
+                                    } rounded-lg p-6 text-white mb-4 text-center`}>
                                     <p className="text-sm opacity-80 mb-2">Ghế</p>
                                     <p className="text-3xl font-bold tracking-widest">
                                         {ticketItem.rowLetter}{ticketItem.seatNumber}
@@ -142,7 +145,7 @@ export default function DetailTicket(props: DetailTicketProps) {
                                     <div className="flex justify-between items-center pb-2 border-b border-gray-100">
                                         <span className="text-sm text-gray-600">Loại ghế</span>
                                         <span className="font-semibold text-gray-900">
-                                            {ticketItem.seatType}
+                                            {ticketItem.seatType === 'NORMAL' ? 'Ghế Thường' : ticketItem.seatType === 'VIP' ? 'Ghế VIP' : ticketItem.seatType === 'COUPLE' ? 'Ghế Đôi' : ticketItem.seatType}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center">
