@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDetailMovies } from '../../services/moviesAPI';
-import type { MoviesType } from '../../type/typeMovies';
+// import type { MoviesType } from '../../type/typeMovies';
+import type { GenreType } from '../../type/typeGenre';
+import type { MoviesTypeResponse } from '../../type/typeMovies';
 
 export default function DetailMovies() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [itemMovies, setItemMovies] = useState<MoviesType>({
+    const [itemMovies, setItemMovies] = useState<MoviesTypeResponse>({
         movieId: 0,
         movieName: "",
         description: "",
@@ -15,7 +17,11 @@ export default function DetailMovies() {
         releaseDate: new Date(),
         posterImage: "",
         trailerUrl: "",
-        genre: "",
+        status: "COMING_SOON",
+        genres: [{
+            genreId: 0,
+            genreName: "",
+        }],
         ageRating: ""
 
     });
@@ -59,9 +65,7 @@ export default function DetailMovies() {
                     >
                         Quay lại
                     </button>
-                    {/* <button className="px-5 py-2 bg-indigo-600 rounded-xl text-sm font-semibold text-white hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all">
-                        Chỉnh sửa phim
-                    </button> */}
+
                 </div>
             </div>
 
@@ -109,7 +113,7 @@ export default function DetailMovies() {
                             <div className="space-y-1">
                                 <p className="text-xs font-bold text-gray-400 uppercase">Thể loại</p>
                                 <p className="text-gray-900 font-semibold bg-gray-100 inline-block px-3 py-1 rounded-lg">
-                                    {itemMovies.genre}
+                                    {itemMovies.genres.map((genre: GenreType) => genre.genreName).join(", ")}
                                 </p>
                             </div>
 
@@ -124,6 +128,10 @@ export default function DetailMovies() {
                             <div className="space-y-1">
                                 <p className="text-xs font-bold text-gray-400 uppercase">Thời lượng</p>
                                 <p className="text-gray-900 font-semibold">{itemMovies.duration} phút</p>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase">Trạng thái</p>
+                                <p className="text-gray-900 font-semibold">{itemMovies.status}</p>
                             </div>
 
                             <div className="space-y-1">

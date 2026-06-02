@@ -2,7 +2,15 @@ import Sidebar from "./SideBar";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
 
+
 export default function AdminLayout() {
+  // const { genres_zustand, fetchGenres } = GenresStore();
+  // fetchGenres();
+  // useEffect(() => {
+  //   fetchGenres();
+  // }, []);
+  // console.log(genres_zustand, "genres in admin layout");
+
   return (
     <div className="flex h-screen overflow-hidden">
 

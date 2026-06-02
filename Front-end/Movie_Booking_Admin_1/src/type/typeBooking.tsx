@@ -9,6 +9,9 @@ export type BookingStatusUpdateRequest = {
 export type BookingResponse = {
     bookingId: number;
     showtimeId: number;
+    customerName: string;
+    movieTitle: string;
+    cinemaName: string;
     totalAmount: number;
     status: string;
     bookingDate: string;

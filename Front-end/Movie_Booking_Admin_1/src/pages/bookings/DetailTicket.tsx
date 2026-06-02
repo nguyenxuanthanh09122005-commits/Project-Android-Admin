@@ -74,6 +74,24 @@ export default function DetailTicket(props: DetailTicketProps) {
                         </p>
                     </div>
                     <div>
+                        <p className="text-sm text-gray-600 font-medium">Khách hàng</p>
+                        <p className="text-2xl font-bold text-green-600 mt-1">
+                            {ticket?.customerName}
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-600 font-medium">Phim</p>
+                        <p className="text-2xl font-bold text-green-600 mt-1">
+                            {ticket?.movieTitle}
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-600 font-medium">Rạp chiếu</p>
+                        <p className="text-2xl font-bold text-green-600 mt-1">
+                            {ticket?.cinemaName}
+                        </p>
+                    </div>
+                    <div>
                         <p className="text-sm text-gray-600 font-medium">Trạng thái</p>
                         <p className="mt-1">
                             <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${ticket?.status?.toLowerCase().includes('paid')

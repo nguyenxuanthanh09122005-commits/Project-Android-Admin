@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 
-import type { MoviesType } from '../type/typeMovies';
+import type { MoviesTypeResponse } from '../type/typeMovies';
 
 export type MovieStoreType = {
-    movies_zustand: MoviesType[],
-    setMovies_zustand: (movies: MoviesType[]) => void,
+    movies_zustand: MoviesTypeResponse[],
+    setMovies_zustand: (movies: MoviesTypeResponse[]) => void,
 }
 
 

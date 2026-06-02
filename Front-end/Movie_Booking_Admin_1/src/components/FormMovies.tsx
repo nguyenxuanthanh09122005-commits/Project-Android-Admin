@@ -1,16 +1,25 @@
 import React, { useState } from 'react'
 import { CreateMovies, EditMovies } from '../services/moviesAPI';
-import type { MoviesType } from '../type/typeMovies';
+import type { MoviesTypeResponse } from '../type/typeMovies';
 import { toast } from 'react-toastify';
+// import { loadGenres } from './listGenres';
+import { GenresStore } from '../store/GenresStore';
+import { getUploadUrl } from '../services/apiUpload';
 export type ReloadData = {
-    movieItem: MoviesType | null,
+    movieItem: MoviesTypeResponse | null,
     reloadData: () => void,
     onSuccess: () => void,
 }
 export default function FormMovies(props: ReloadData) {
+    const { genres_zustand } = GenresStore();
+    console.log(genres_zustand, "genres_zustand");
+
     const { movieItem, reloadData, onSuccess } = props;
+    const [previewImage, setPreviewImage] = useState<string>(movieItem ? movieItem.posterImage : '');
     const [loading, setLoading] = useState(false);
     console.log(loading);
+    // loadGenres();
+    console.log(genres_zustand, "genresssssssss");
 
     const [formData, setFormData] = useState({
         movieName: movieItem ? movieItem.movieName : '',
@@ -19,18 +28,50 @@ export default function FormMovies(props: ReloadData) {
         releaseDate: movieItem ? new Date(movieItem.releaseDate).toISOString().split('T')[0] : '',
         posterImage: movieItem ? movieItem.posterImage : '',
         trailerUrl: movieItem ? movieItem.trailerUrl : '',
-        genre: movieItem ? movieItem.genre : '',
+        status: movieItem ? movieItem.status : 'COMING_SOON',
+        genreIds: movieItem ? movieItem.genres.map((genre) => genre.genreId) : [],
         ageRating: movieItem ? movieItem.ageRating : 'P'
     });
     console.log(formData);
     const handleFormData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        setFormData({ ...formData, [name]: value });
+        setFormData({
+            ...formData,
+            [name]: value,
+            status: formData.releaseDate && new Date(formData.releaseDate) > new Date() ? 'COMING_SOON' : 'SHOWING',
+        });
     }
     console.log(formData, "formData");
 
+    const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            const url = URL.createObjectURL(file!);
+            setPreviewImage(url);
+            const res = await getUploadUrl(file);
+            console.log(res, "resUpload");
+            setPreviewImage(res.posterImage);
+            setFormData({ ...formData, posterImage: res.posterImage });
+        } catch (error) {
+            console.error("Error uploading file:", error);
+        }
 
+    }
+    console.log(previewImage, "ppppppp");
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = e.target;
+        if (checked) {
+            setFormData({ ...formData, genreIds: !formData.genreIds.includes(Number(value)) ? [...formData.genreIds, Number(value)] : formData.genreIds });
+        } else {
+            setFormData({ ...formData, genreIds: formData.genreIds.filter((id) => id !== Number(value)) });
+        }
+        console.log(checked, "checked");
+
+    }
+    console.log(formData, "formData");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -42,16 +83,18 @@ export default function FormMovies(props: ReloadData) {
             releaseDate: formData.releaseDate,
             posterImage: formData.posterImage,
             trailerUrl: formData.trailerUrl,
-            genre: formData.genre,
+            status: formData.status,
+            genreIds: formData.genreIds.map((id) => Number(id)),
             ageRating: formData.ageRating
         }
         if (uploadForm.movieName == '' ||
             uploadForm.description == '' ||
             uploadForm.duration == 0 ||
             uploadForm.releaseDate == '' ||
-            uploadForm.posterImage == '' ||
+
             uploadForm.trailerUrl == '' ||
-            uploadForm.genre == '') {
+            uploadForm.genreIds.length === 0 ||
+            uploadForm.ageRating == '') {
             alert("Vui lòng điền đủ thông tin");
         }
         try {
@@ -114,18 +157,23 @@ export default function FormMovies(props: ReloadData) {
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-gray-300"
                                 />
                             </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-600 mb-2">Thể loại:</label>
 
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-2">Thể loại</label>
-                                <input
-                                    value={formData.genre}
-                                    onChange={handleFormData}
-                                    name='genre'
-                                    type="text"
-                                    placeholder="Hành động, Viễn tưởng..."
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-gray-300"
-                                />
-                            </div>
+                            {genres_zustand.map((genre) => (
+                                <div key={genre.genreId} className="flex items-center space-x-2 mb-2">
+                                    <input
+                                        name={genre.genreName}
+                                        onChange={handleCheckboxChange}
+                                        value={genre.genreId}
+                                        checked={formData.genreIds.includes(genre.genreId)}
+                                        type="checkbox"
+                                    // onClick={handleCheck}
+                                    />
+                                    <span className="text-gray-700">{genre.genreName}</span>
+                                </div>)
+                            )}
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Giới hạn độ tuổi</label>
@@ -164,6 +212,18 @@ export default function FormMovies(props: ReloadData) {
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none transition-all cursor-pointer"
                                 />
                             </div>
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-600 mb-2">Trạng thái</label>
+                                <input
+
+                                    value={formData.status}
+                                    onChange={handleFormData}
+                                    name='status'
+                                    type="text"
+                                    disabled
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none transition-all"
+                                />
+                            </div>
                         </div>
                     </section>
 
@@ -178,10 +238,10 @@ export default function FormMovies(props: ReloadData) {
                             <div className="md:col-span-1">
                                 <label className="block text-sm font-semibold text-gray-600 mb-2">Poster</label>
                                 <input
-                                    value={formData.posterImage}
-                                    onChange={handleFormData}
+                                    // value={formData.posterImage}
+                                    onChange={handleFile}
                                     name='posterImage'
-                                    type="text"
+                                    type="file"
                                     placeholder="https://image.com/poster.jpg"
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none transition-all font-mono text-xs"
                                 />

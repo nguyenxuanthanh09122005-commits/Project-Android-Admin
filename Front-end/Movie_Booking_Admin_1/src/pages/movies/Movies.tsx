@@ -1,23 +1,42 @@
 import { useEffect, useState } from 'react'
-import type { MoviesType } from '../../type/typeMovies';
+import type { MoviesTypeResponse } from '../../type/typeMovies';
 import { DeleteMovies, getListMovies } from '../../services/moviesAPI';
 import { MovieCard } from '../../components/MovieCard';
 import Modal from '../../components/Modal';
 import FormMovies from '../../components/FormMovies';
 import { MovieStore } from '../../store/MovieStore';
 import { toast } from 'react-toastify';
+import { GenresStore } from '../../store/GenresStore';
+import { getGenres } from '../../services/apiGenres';
 
 
 export default function Movies() {
+    const { genres_zustand } = GenresStore();
+    const { setGenres_zustand } = GenresStore();
     const { setMovies_zustand } = MovieStore();
     const [loading, setLoading] = useState(false);
     console.log(loading);
     const [isOpen, setIsOpen] = useState(false);
-    const [movies, setMovies] = useState<MoviesType[]>([]);
-    const [isCreate, setIsCreate] = useState<MoviesType | null>(null);
+    const [movies, setMovies] = useState<MoviesTypeResponse[]>([]);
+    const [isCreate, setIsCreate] = useState<MoviesTypeResponse | null>(null);
     console.log(isCreate);
 
     console.log(movies);
+    const loadGenres = async () => {
+        setLoading(true);
+        try {
+            const res = await getGenres();
+            setGenres_zustand(res);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        loadGenres();
+    }, [])
     const loadData = async () => {
         setLoading(true);
         try {
@@ -37,14 +56,17 @@ export default function Movies() {
         loadData();
     }, [])
 
+    console.log(genres_zustand, "genres_zustand");
 
-    const showing = movies.filter((item: MoviesType) => {
+    console.log(movies, "listmovies");
+
+    const showing = movies.filter((item: MoviesTypeResponse) => {
         const releaseDate = new Date(item.releaseDate);
         const today = new Date();
         return releaseDate <= today;
     })
 
-    const coming_soon = movies.filter((item: MoviesType) => {
+    const coming_soon = movies.filter((item: MoviesTypeResponse) => {
         const releaseDate = new Date(item.releaseDate);
         const today = new Date();
         return releaseDate > today;
@@ -88,7 +110,7 @@ export default function Movies() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                    {showing.map((item: MoviesType) => (
+                    {showing.map((item: MoviesTypeResponse) => (
                         <MovieCard handleDelete={() => handleDelete(item.movieId)} handleEdit={() => setIsCreate(item)} key={item.movieId} item={item} handleIsOpen={() => setIsOpen(true)} />
                     ))}
                 </div>
@@ -104,7 +126,7 @@ export default function Movies() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                    {coming_soon.map((item: MoviesType) => (
+                    {coming_soon.map((item: MoviesTypeResponse) => (
                         <MovieCard handleDelete={() => handleDelete(item.movieId)} handleEdit={() => setIsCreate(item)} key={item.movieId} item={item} handleIsOpen={() => setIsOpen(true)} />
                     ))}
                 </div>

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import type { MoviesType } from "../type/typeMovies";
+import type { MoviesTypeResponse } from "../type/typeMovies";
 
 export type MovieCardType = {
-    item: MoviesType,
+    item: MoviesTypeResponse,
     handleIsOpen: (id: number) => void,
     handleEdit: () => void,
     handleDelete: (id: number) => void,

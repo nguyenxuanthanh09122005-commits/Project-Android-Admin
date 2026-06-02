@@ -1,4 +1,18 @@
-export type MoviesType = {
+import type { GenreType } from "./typeGenre";
+
+export type MoviesTypeRequest = {
+    movieName: string,
+    description: string,
+    duration: number,
+    releaseDate: Date | string,
+    posterImage: string,
+    trailerUrl: string,
+    status: MoviesStatus,
+    genreIds: number[],
+    ageRating: string
+}
+
+export type MoviesTypeResponse = {
     movieId: number,
     movieName: string,
     description: string,
@@ -6,23 +20,14 @@ export type MoviesType = {
     releaseDate: Date | string,
     posterImage: string,
     trailerUrl: string,
-    genre: string,
-    ageRating: string
-}
-
-export type MoviesType_1 = {
-    movieName: string,
-    description: string,
-    duration: number,
-    releaseDate: Date | string,
-    posterImage: string,
-    trailerUrl: string,
-    genre: string,
+    status: MoviesStatus,
+    genres: GenreType[],
     ageRating: string
 }
 export interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
-    // title: string;
+
     children: React.ReactNode;
 }
+export type MoviesStatus = "COMING_SOON" | "EARLY_ACCESS" | "SHOWING" | "ENDED";
