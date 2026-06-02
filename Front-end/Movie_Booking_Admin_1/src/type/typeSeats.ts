@@ -17,15 +17,17 @@ export type SeatResponse = {
 export type SeatBulkRequest = {
     seats: SeatRequest[]
 }
-export type SeatBulkReposponse = {}
 
-
-// export type SeatAvailabilityResponse = {
-//     seatId: number,
-//     rowLetter: string,
-//     seatNumber: number,
-//     seatType: SeatType,
-//     locked: boolean
-// }
+export type SeatAvailabilityResponse = {
+    seatId: number,
+    rowLetter: string,
+    seatNumber: number,
+    seatType: SeatType,
+    locked: boolean
+}
+export type SeatGenerationRequest = {
+    rows: number,
+    columns: number,
+}
 export type SeatStatus = "ACTIVE" | "DISABLED";
 export type SeatType = "NORMAL" | "VIP" | "COUPLE";

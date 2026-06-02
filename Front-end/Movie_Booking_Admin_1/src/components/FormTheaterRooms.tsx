@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import type { TheaterRoomType, TheaterRoomTypeRequest } from '../type/typeTheaterRooms';
 import { CreateTheaterRooms, EditTheaterRooms } from '../services/theater_roomsAPI';
 import { toast } from 'react-toastify';
+import { CreateAutoSeat } from '../services/apiSeats';
 
 export type { TheaterRoomTypeRequest } from '../type/typeTheaterRooms';
 type TheaterRoomsProps = {
@@ -56,6 +57,10 @@ export default function FormTheaterRooms({ theaterRoomItem, cinemaId, onSuccess,
                 console.log(apiCall, "apiCall");
             } else {
                 const apiCall = await CreateTheaterRooms(formData);
+                if (apiCall && apiCall.roomId) {
+                    const apiGenerateSeats = await CreateAutoSeat(apiCall.roomId, { rows: formData.rows, columns: formData.columns });
+                    console.log(apiGenerateSeats, "apiGenerateSeats");
+                }
                 console.log(apiCall, "apiCall");
             }
 

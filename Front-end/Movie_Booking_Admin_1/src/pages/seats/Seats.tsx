@@ -6,11 +6,14 @@ import Modal from '../../components/Modal';
 import FormSeats from '../../components/FormSeats';
 import SeatsCard from '../../components/SeatsCard';
 import { toast } from 'react-toastify';
+import FormChangeSeat from '../../components/FormChangeSeat';
 
 export default function Seats() {
   const [seats, setSeats] = useState<SeatResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [selectedSeat, setSelectedSeat] = useState<SeatResponse | null>(null);
   // const [countSeats, setCountSeats] = useState<number>(0);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -76,6 +79,7 @@ export default function Seats() {
       </div>
     );
   }
+  console.log(isCreating, "issssssss");
 
   return (
     <div className='p-4 md:p-8 bg-gray-50 min-h-screen'>
@@ -93,7 +97,7 @@ export default function Seats() {
           </button>
 
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => { setIsModalOpen(true); setIsCreating(true) }}
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-md transition-all active:scale-95 flex items-center gap-2"
           >
             Thêm ghế
@@ -129,8 +133,7 @@ export default function Seats() {
 
                   <div className="flex gap-2.5">
                     {groupedSeats[row].map((seat) => {
-                      // setCountSeats(countSeats + 1);
-                      return (< SeatsCard seat={seat} handleDeleteSeat={() => handleDeleteSeat(seat.seatId)} />)
+                      return (< SeatsCard roomId={Number(id)} seat={seat} handleDeleteSeat={() => handleDeleteSeat(seat.seatId)} onSeatClick={() => { setIsCreating(false); setIsModalOpen(true); setSelectedSeat(seat) }} />)
                     })}
                   </div>
 
@@ -185,13 +188,29 @@ export default function Seats() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="p-2">
-          <div className="mb-6 text-center">
-            <h3 className="text-2xl font-bold text-gray-900">Quản lý sơ đồ ghế</h3>
-            <p className="text-gray-500 text-sm">Thêm một hoặc nhiều ghế vào phòng chiếu</p>
-          </div>
+
+
+        {isCreating ? (
+
           <FormSeats countSeat={seats.length} listSeats={groupedSeats} roomId={Number(id)} onClose={() => setIsModalOpen(false)} onSuccess={loadData} />
-        </div>
+        ) : (
+          selectedSeat && (
+            <div className="p-2">
+              <div className="mb-6 text-center">
+                <h3 className="text-2xl font-bold text-gray-900">Cập nhật ghế</h3>
+                <p className="text-gray-500 text-sm">Chỉnh sửa thông tin ghế ngồi</p>
+              </div>
+              <FormChangeSeat
+                seat={selectedSeat}
+
+                roomId={Number(id)}
+                onClose={() => setIsModalOpen(false)}
+                handleDeleteSeat={handleDeleteSeat}
+                onSuccess={loadData}
+              /></div>
+          )
+        )}
+
       </Modal>
     </div>
   )
