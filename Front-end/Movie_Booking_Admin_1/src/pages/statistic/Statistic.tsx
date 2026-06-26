@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getListBookings } from '../../services/apiBookings';
 import type { BookingResponse } from '../../type/typeBooking';
 import {
@@ -235,7 +235,7 @@ export default function Statistic() {
                                         paddingAngle={5}
                                         dataKey="value"
                                     >
-                                        {topMovies.map((entry, index) => (
+                                        {topMovies.map((_entry, index) => (
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                         ))}
                                     </Pie>
