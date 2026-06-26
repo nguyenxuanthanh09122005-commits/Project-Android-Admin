@@ -55,16 +55,24 @@ export default function FormTheaterRooms({ theaterRoomItem, cinemaId, onSuccess,
             if (theaterRoomItem) {
                 const apiCall = await EditTheaterRooms(theaterRoomItem.roomId, formData);
                 console.log(apiCall, "apiCall");
+                toast.success("Cập nhật phòng chiếu thành công!");
             } else {
                 const apiCall = await CreateTheaterRooms(formData);
-                if (apiCall && apiCall.roomId) {
-                    const apiGenerateSeats = await CreateAutoSeat(apiCall.roomId, { rows: formData.rows, columns: formData.columns });
-                    console.log(apiGenerateSeats, "apiGenerateSeats");
-                }
                 console.log(apiCall, "apiCall");
+                if (apiCall && apiCall.roomId) {
+                    try {
+                        const apiGenerateSeats = await CreateAutoSeat(apiCall.roomId, { rows: formData.rows, columns: formData.columns });
+                        console.log(apiGenerateSeats, "apiGenerateSeats");
+                        toast.success("Thêm phòng và tự động tạo ghế thành công!");
+                    } catch (seatError: any) {
+                        console.error("Seat Generation Error:", seatError);
+                        toast.warning("Phòng chiếu đã được tạo, nhưng không thể tự động tạo ghế. Vui lòng kiểm tra lại hoặc tạo ghế thủ công!");
+                    }
+                } else {
+                    toast.success("Thêm phòng chiếu thành công!");
+                }
             }
 
-            toast.success(`${theaterRoomItem ? 'Cập nhật' : 'Thêm'} thành công!`);
             onSuccess();
             reloadData();
         } catch (error: any) {

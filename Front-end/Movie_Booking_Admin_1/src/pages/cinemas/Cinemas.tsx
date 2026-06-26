@@ -60,8 +60,9 @@ export default function Cinemas() {
             const response = await DeleteCinemas(id);
             console.log(response, "delete cinema");
             toast.success('Xóa rạp thành công!')
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.error("Delete Error:", error);
+            toast.error(error.response?.data?.message || 'Xóa rạp thất bại! Rạp chiếu này có thể đang có phòng chiếu hoặc lịch chiếu liên kết.');
         } finally {
             fetchCinemas();
         }

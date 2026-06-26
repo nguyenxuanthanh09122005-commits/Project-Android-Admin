@@ -68,45 +68,45 @@ const menu = [
 const email = localStorage.getItem("email");
 export default function Sidebar() {
     return (
-        <div className="w-72 bg-slate-900 text-slate-400 p-6 flex flex-col h-screen border-r border-slate-800 shadow-2xl">
+        <div className="w-72 bg-sidebar text-zinc-400 p-6 flex flex-col h-screen border-r border-zinc-800/40">
             {/* Logo Section */}
-            <div className="flex items-center gap-3 mb-10 px-2">
-                <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-white">
+            <div className="flex items-center gap-3 mb-12 px-2">
+                <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-brand-500">
                         <path d="M4.5 4.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h8.25a3 3 0 0 0 3-3v-9a3 3 0 0 0-3-3H4.5ZM19.94 18.75l-2.69-2.69V7.94l2.69-2.69c.944-.945 2.56-.276 2.56 1.06v11.38c0 1.336-1.616 2.005-2.56 1.06Z" />
                     </svg>
                 </div>
                 <div>
-                    <h1 className="text-xl font-black text-white tracking-tight uppercase">
-                        Movie<span className="text-indigo-500">Hub</span>
+                    <h1 className="text-xl font-bold text-zinc-100 tracking-tight">
+                        Movie<span className="text-brand-500">Hub</span>
                     </h1>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Admin Dashboard</p>
+                    <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-[0.2em] mt-0.5">Admin Portal</p>
                 </div>
             </div>
 
             {/* Menu Section */}
-            <nav className="flex flex-col gap-1 flex-1">
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 px-2">Main Menu</p>
+            <nav className="flex flex-col gap-1.5 flex-1">
+                <p className="text-[11px] font-medium text-zinc-600 uppercase tracking-widest mb-3 px-2">Quản lý hệ thống</p>
                 {menu.map((item) => (
                     <NavLink
                         key={item.path}
                         to={item.path}
                         className={({ isActive }) => `
-                            flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                            flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative
                             ${isActive
-                                ? "bg-indigo-600/10 text-indigo-400 font-semibold shadow-sm"
-                                : "hover:bg-slate-800 hover:text-slate-200"
+                                ? "bg-brand-500/10 text-brand-400 font-medium"
+                                : "hover:bg-zinc-800/40 hover:text-zinc-200"
                             }
                         `}
                     >
                         {({ isActive }) => (
                             <>
-                                <span className={`${isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-slate-300"} transition-colors`}>
+                                <span className={`${isActive ? "text-brand-400" : "text-zinc-500 group-hover:text-zinc-400"} transition-colors duration-300`}>
                                     {item.icon}
                                 </span>
                                 <span className="text-sm tracking-wide">{item.label}</span>
                                 {isActive && (
-                                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-lg shadow-indigo-500/50" />
+                                    <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
                                 )}
                             </>
                         )}
@@ -115,16 +115,14 @@ export default function Sidebar() {
             </nav>
 
             {/* Bottom Section */}
-            <div className="mt-auto pt-6 border-t border-slate-800">
-                <div className="px-2 mb-4">
-                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-800/50 border border-slate-800">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                            AD
-                        </div>
-                        <div className="overflow-hidden">
-                            <p className="text-xs font-bold text-slate-200 truncate">Administrator</p>
-                            <p className="text-[10px] text-slate-500 truncate">{email}</p>
-                        </div>
+            <div className="mt-auto pt-6 border-t border-zinc-800/40">
+                <div className="flex items-center gap-3 p-3 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900 transition-colors cursor-pointer group">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/40 transition-shadow">
+                        AD
+                    </div>
+                    <div className="overflow-hidden">
+                        <p className="text-sm font-medium text-zinc-200 truncate">Administrator</p>
+                        <p className="text-[11px] text-zinc-500 truncate">{email || "admin@moviehub.com"}</p>
                     </div>
                 </div>
             </div>

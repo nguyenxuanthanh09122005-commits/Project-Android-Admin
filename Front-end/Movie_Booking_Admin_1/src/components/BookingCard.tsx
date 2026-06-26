@@ -64,26 +64,25 @@ export default function BookingCard(props: BookingCardProps) {
     }
 
     return (
-
         <tr
             key={item.bookingId}
-            className="hover:bg-blue-50 transition-colors duration-200 ease-in-out"
+            className="border-b border-zinc-100 hover:bg-brand-50/30 transition-colors duration-200 ease-in-out group"
         >
-            <td className="px-6 py-4 text-sm font-semibold text-blue-600">
+            <td className="px-5 py-4 text-sm font-bold text-brand-600">
                 #{item.bookingId}
             </td>
-            <td className="px-6 py-4 text-sm text-gray-700">
-                {item.showtimeId}
+            <td className="px-5 py-4 text-sm text-zinc-600 font-medium">
+                ST-{item.showtimeId}
             </td>
-            <td className="px-6 py-4 text-sm font-bold text-green-600">
+            <td className="px-5 py-4 text-sm font-bold text-emerald-600">
                 {formatCurrency(item.totalAmount)}
             </td>
-            <td className="px-6 py-4 text-sm">
+            <td className="px-5 py-4 text-sm">
                 <select
                     name="status"
                     value={updateStatus.status}
                     onChange={handleChange}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-shadow appearance-none cursor-pointer"
                 >
                     <option value="">-- Chọn trạng thái --</option>
                     <option value="PendingPayment">Đang thanh toán</option>
@@ -91,24 +90,24 @@ export default function BookingCard(props: BookingCardProps) {
                     {/* <option value="Cancel">Đã hủy</option> */}
                 </select>
             </td>
-            <td className="px-6 py-4 text-sm text-gray-600">
+            <td className="px-5 py-4 text-sm text-zinc-500">
                 {formatDate(item.bookingDate)}
             </td>
-            <td className="px-6 py-4 text-sm">
+            <td className="px-5 py-4 text-sm">
                 <div className="flex gap-2">
                     <button
                         onClick={() => setIsOpen(true)}
-                        className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-3 py-1 rounded-md text-xs font-semibold transition-colors duration-200 flex items-center gap-1 disabled:cursor-not-allowed"
+                        className="bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-700 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Xem chi tiết
+                        Chi tiết
                     </button>
                     <button
                         disabled={updateStatus.status == item.status ? true : false}
                         ref={buttonRef}
                         onClick={handleSubmit}
-                        className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-3 py-1 rounded-md text-xs font-semibold transition-colors duration-200 flex items-center gap-1 disabled:cursor-not-allowed"
+                        className="bg-brand-600 hover:bg-brand-700 disabled:bg-zinc-300 disabled:text-zinc-500 text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center gap-1 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Đang cập nhật...' : 'Cập nhật'}
+                        {loading ? 'Đang xử lý...' : 'Cập nhật'}
                     </button>
                 </div>
             </td>
@@ -116,6 +115,5 @@ export default function BookingCard(props: BookingCardProps) {
                 <DetailTicket item={item} />
             </Modal>
         </tr>
-
     )
 }
