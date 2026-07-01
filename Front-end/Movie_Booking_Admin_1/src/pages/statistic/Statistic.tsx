@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getListBookings } from '../../services/apiBookings';
 import type { BookingResponse } from '../../type/typeBooking';
+import { getListMovies } from '../../services/moviesAPI';
+import type { MoviesTypeResponse } from '../../type/typeMovies';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
     LineChart, Line,
@@ -9,28 +11,43 @@ import {
 
 export default function Statistic() {
     const [bookings, setBookings] = useState<BookingResponse[]>([]);
+    const [movies, setMovies] = useState<MoviesTypeResponse[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchBookings = async () => {
+        const fetchData = async () => {
             try {
-                const res = await getListBookings();
-                // Check if res is array. If not, maybe res.data
-                if (Array.isArray(res)) {
-                    setBookings(res);
-                } else if (res && Array.isArray(res.data)) {
-                    setBookings(res.data);
+                const [bookingsRes, moviesRes] = await Promise.all([
+                    getListBookings(),
+                    getListMovies()
+                ]);
+
+                // Process bookings
+                if (Array.isArray(bookingsRes)) {
+                    setBookings(bookingsRes);
+                } else if (bookingsRes && Array.isArray(bookingsRes.data)) {
+                    setBookings(bookingsRes.data);
                 } else {
                     setBookings([]);
                 }
+
+                // Process movies
+                if (Array.isArray(moviesRes)) {
+                    setMovies(moviesRes);
+                } else if (moviesRes && Array.isArray(moviesRes.data)) {
+                    setMovies(moviesRes.data);
+                } else {
+                    setMovies([]);
+                }
             } catch (error) {
-                console.error("Error fetching bookings:", error);
+                console.error("Error fetching statistic data:", error);
                 setBookings([]);
+                setMovies([]);
             } finally {
                 setLoading(false);
             }
         };
-        fetchBookings();
+        fetchData();
     }, []);
 
     if (loading) {
@@ -160,7 +177,9 @@ export default function Statistic() {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-zinc-500">Phim đang chiếu</p>
-                        <h3 className="text-2xl font-bold text-zinc-900 mt-1">{Object.keys(movieRevenueMap).length}</h3>
+                        <h3 className="text-2xl font-bold text-zinc-900 mt-1">
+                            {movies.filter(movie => movie.status === 'SHOWING').length}
+                        </h3>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import type { SeatResponse } from '../type/typeSeats';
 import { UpdateSeatType, UpdateSeatStatus } from '../services/apiSeats';
 import { toast } from 'react-toastify';
-import { useSearchParams } from 'react-router-dom';
 
 export type FormChangeSeatProps = {
     seat: SeatResponse;
@@ -13,40 +12,23 @@ export type FormChangeSeatProps = {
 };
 
 export default function FormChangeSeat({ seat, roomId, onClose, onSuccess, handleDeleteSeat }: FormChangeSeatProps) {
-    const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState(false);
-    const filters = {
-        type: searchParams.get('type') || '',
-        status: searchParams.get('status') || '',
-    }
-    console.log(filters, "filters");
-    const updateFilters = (newValues: Partial<typeof filters>) => {
-        const newParams = new URLSearchParams(searchParams);
+    const [seatType, setSeatType] = useState<SeatResponse['seatType']>(seat.seatType);
+    const [status, setStatus] = useState<SeatResponse['status']>(seat.status);
 
-        Object.entries(newValues).forEach(([key, value]) => {
-            if (value === "" || value === null) {
-                newParams.delete(key);
-            } else {
-                newParams.set(key, String(value));
-            }
-        });
-        setSearchParams(newParams);
-    };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
             // Update Type if changed
-            if (filters.type) {
-                const res = await UpdateSeatType(roomId, seat.seatId, filters.type as SeatResponse['seatType']);
+            if (seatType !== seat.seatType) {
+                const res = await UpdateSeatType(roomId, seat.seatId, seatType);
                 console.log(res);
-
-                setSearchParams({});
             }
-            if (filters.status) {
-                const res = await UpdateSeatStatus(roomId, seat.seatId, filters.status as SeatResponse['status']);
+            // Update Status if changed
+            if (status !== seat.status) {
+                const res = await UpdateSeatStatus(roomId, seat.seatId, status);
                 console.log(res);
-                setSearchParams({});
             }
             toast.success('Cập nhật ghế thành công!');
             onSuccess();
@@ -72,8 +54,8 @@ export default function FormChangeSeat({ seat, roomId, onClose, onSuccess, handl
                 <div>
                     <label className="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Loại ghế</label>
                     <select
-                        value={filters.type}
-                        onChange={(e) => updateFilters({ ...filters, type: e.target.value })}
+                        value={seatType}
+                        onChange={(e) => setSeatType(e.target.value as SeatResponse['seatType'])}
                         className="mt-1 block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3.5 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all font-semibold"
                     >
                         <option value="NORMAL">Ghế Thường</option>
@@ -85,8 +67,8 @@ export default function FormChangeSeat({ seat, roomId, onClose, onSuccess, handl
                 <div>
                     <label className="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Trạng thái</label>
                     <select
-                        value={filters.status}
-                        onChange={(e) => updateFilters({ ...filters, status: e.target.value })}
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value as SeatResponse['status'])}
                         className="mt-1 block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3.5 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all font-semibold"
                     >
                         <option value="ACTIVE">Hoạt động</option>
@@ -105,9 +87,12 @@ export default function FormChangeSeat({ seat, roomId, onClose, onSuccess, handl
                 </div>
             </form >
             <button
-                type="submit"
-                onClick={() => handleDeleteSeat(seat.seatId)}
-                className={`w-full py-4 rounded-xl font-bold text-white transition-all shadow-lg active:scale-95 mt-6 ${loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200'
+                type="button"
+                onClick={async () => {
+                    await handleDeleteSeat(seat.seatId);
+                    onClose();
+                }}
+                className={`w-full py-4 rounded-xl font-bold text-white transition-all shadow-lg active:scale-95 mt-2 ${loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700 shadow-rose-200'
                     }`}
             >
                 Xóa ghế
