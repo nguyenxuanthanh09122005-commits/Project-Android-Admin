@@ -36,16 +36,18 @@ export default function Login() {
             const res = await getLogin(formLogin);
             console.log(res.data, "ressss");
             if (res.status === 200) {
-                setLogin(res.data.token, res.data.email, res.data.role);
                 if (res.data.role === "ROLE_ADMIN") {
+                    setLogin(res.data.token, res.data.email, res.data.role);
                     toast.success('Đăng nhập thành công')
                     navigate("/");
+                } else {
+                    toast.error('Tài khoản không có quyền truy cập. ');
                 }
             }
 
         } catch (error) {
             console.log(error);
-
+            toast.error('Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản và mật khẩu!');
         } finally {
             setLoading(false);
         }
@@ -111,5 +113,6 @@ export default function Login() {
             </div>
         </div>
     );
+
 
 }
